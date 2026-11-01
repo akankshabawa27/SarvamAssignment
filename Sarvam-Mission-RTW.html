@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All things Sarvam — Akanksha Bawa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1f1f1f; --ink-2:#4d4d4d; --muted:#666; --line:#f0f0f0; --line-2:#e6e6e6;
+    --surface:#fcfcfc; --surface-2:#f5f5f5; --btn-dark:#2a2c33;
+    --bubble-blue:#e8effc; --bubble-peach:#feede6;
+    --blue-1:#f4f7ff; --blue-2:#bed2ff; --lavender:#a6a7e3; --blue-ink:#3b4fd8;
+    --orange-a:#d5650f; --orange-b:#eaaf1c; --peach-1:#f2d1b7; --peach-2:#f9e7bb; --green:#3c9a5f; --green-1:#dceace;
+    --serif:"Newsreader","Season Mix",Georgia,serif;
+    --sans:"Figtree","Matter",system-ui,-apple-system,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --max:1120px; --ease:cubic-bezier(.65,0,.35,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth} html,body{overflow-x:clip}
+  body{font-family:var(--sans);color:var(--ink);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+  h1,h2,.serif{font-family:var(--serif);font-weight:400;letter-spacing:-0.02em;line-height:1.12}
+  em.grad{font-style:italic;background:linear-gradient(180deg,var(--orange-a),var(--orange-b));-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.06em}
+  .mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
+  .muted{color:var(--muted)}
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .8s ease, transform .8s var(--ease)}
+  .rv.on{opacity:1;transform:none}
+
+  /* top bar */
+  .bar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .bar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:600}
+  .brand .wm{height:18px;width:auto;color:var(--ink)} .brand .sep{width:1px;height:18px;background:var(--line-2)} .brand .bt{font-weight:500;color:var(--ink-2);font-size:15px}
+  .toc{display:flex;gap:4px}
+  .toc a{font-size:14px;color:var(--muted);padding:7px 14px;border-radius:999px;transition:all .25s}
+  .toc a.on,.toc a:hover{background:var(--surface-2);color:var(--ink)}
+  .progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:linear-gradient(90deg,var(--orange-a),var(--orange-b))}
+
+  /* cover */
+  .cover{position:relative;overflow:hidden;padding:110px 0 90px;background:
+     radial-gradient(55% 70% at 12% 20%, rgba(190,210,255,.65), transparent 70%),
+     radial-gradient(45% 60% at 90% 15%, rgba(166,167,227,.45), transparent 70%),
+     radial-gradient(50% 60% at 70% 100%, rgba(249,231,187,.7), transparent 70%), var(--blue-1)}
+  .cover .tag{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line-2);border-radius:999px;padding:6px 14px 6px 6px;color:var(--ink-2)}
+  .cover .tag b{background:var(--btn-dark);color:#fff;border-radius:999px;padding:3px 10px;font-weight:500}
+  .cover-logo .wm{height:30px;width:auto;color:var(--ink);display:block;margin-bottom:34px}
+  .cover h1{font-size:clamp(52px,8vw,104px);margin:28px 0 22px;max-width:900px}
+  .cover .sub{font-size:20px;color:var(--ink-2);max-width:620px}
+  .meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:40px;padding-top:24px;border-top:1px solid rgba(31,31,31,.08);max-width:720px}
+  .meta div span{display:block;color:var(--muted)}
+  .meta div b{font-weight:500}
+  .chapters{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:64px}
+  .chap{background:rgba(255,255,255,.75);border:1px solid #fff;border-radius:16px;padding:20px 22px;transition:transform .3s var(--ease), box-shadow .3s;display:block}
+  .chap:hover{transform:translateY(-3px);box-shadow:0 20px 40px -28px rgba(42,44,51,.45)}
+  .chap .mono{color:var(--orange-a)}
+  .chap h3{font-family:var(--serif);font-weight:400;font-size:24px;margin:8px 0 4px;letter-spacing:-.01em}
+  .chap p{font-size:14px;color:var(--muted)}
+  .cover-words{position:absolute;right:-40px;top:70px;font-family:var(--serif);font-size:200px;line-height:1;color:rgba(255,255,255,.55);pointer-events:none;letter-spacing:-.04em;font-style:italic}
+
+  /* section scaffold */
+  section.ch{padding:110px 0;border-top:1px solid var(--line)}
+  .q{display:grid;grid-template-columns:220px 1fr;gap:56px;margin-bottom:56px}
+  .q-num{font-family:var(--serif);font-size:88px;line-height:.9;color:var(--blue-2);letter-spacing:-.04em}
+  .q-label{margin-top:14px;color:var(--muted)}
+  .q-ask{font-size:15px;color:var(--muted);border-left:2px solid var(--line-2);padding-left:16px;margin-bottom:22px;max-width:640px;font-style:italic}
+  .q h2{font-size:clamp(34px,4.6vw,56px)}
+
+  /* 01 */
+  .big{font-family:var(--serif);font-size:clamp(28px,3.4vw,40px);line-height:1.25;letter-spacing:-.015em;max-width:860px}
+  .big i{font-style:italic;color:var(--orange-a)}
+  .analogy{margin-top:44px;display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
+  .card{border-radius:20px;padding:30px;border:1px solid var(--line)}
+  .peach{background:linear-gradient(140deg,#fff6ef 0%,var(--peach-2) 100%);border-color:#f6e2cc}
+  .peach .mono{color:#a5460f}
+  .peach p{font-family:var(--serif);font-size:22px;line-height:1.4;margin-top:12px;letter-spacing:-.01em}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .fact{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .fact b{display:block;font-family:var(--serif);font-weight:400;font-size:34px;letter-spacing:-.02em;line-height:1.05}
+  .fact>span{font-size:13.5px;color:var(--muted)}
+
+  .anat{margin-top:72px}
+  .anat-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+  .anat-head h3{font-family:var(--serif);font-weight:400;font-size:34px;letter-spacing:-.02em}
+  .anat-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:28px;align-items:stretch}
+  .stack{position:relative;display:flex;flex-direction:column;padding:26px;border-radius:22px;background:linear-gradient(180deg,#f8faff,#eef2ff);border:1px solid #e3e9fb}
+  .slab{position:relative;z-index:1;display:grid;grid-template-columns:28px 44px 1fr;align-items:center;gap:14px;background:#fff;border:1px solid var(--line-2);border-radius:14px;padding:14px 18px;cursor:pointer;transition:background .35s, box-shadow .35s, border-color .35s;text-align:left;font:inherit;color:inherit;width:100%;overflow:hidden}
+  .slab::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue-ink);transform:scaleY(0);transition:transform .35s var(--ease)}
+  .slab:hover{border-color:var(--blue-2)}
+  .slab.on{border-color:var(--blue-2);box-shadow:0 18px 40px -26px rgba(59,79,216,.55);background:#fbfcff}
+  .slab.on::before{transform:none}
+  .slab .num{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .slab.on .num{color:var(--blue-ink)}
+  .slab .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--bg);color:var(--fg)}
+  .slab .ico svg{width:22px;height:22px}
+  .slab b{display:block;font-size:16px}
+  .slab small{color:var(--muted);font-size:13.5px}
+  .link{position:relative;z-index:1;height:34px;display:flex;align-items:center;padding-left:92px}
+  .link span{font-size:12.5px;color:var(--muted);background:#eef2ff;padding:0 6px}
+  .link::before{content:"";position:absolute;left:81px;top:4px;bottom:4px;width:0;border-left:1.5px dashed #b9c7f3}
+  .link::after{content:"";position:absolute;left:77px;bottom:2px;border:4.5px solid transparent;border-top:6px solid #b9c7f3}
+  .slab.base{margin-top:22px;grid-template-columns:44px 1fr auto;background:var(--btn-dark);color:#fff;border-color:var(--btn-dark)}
+  .slab.base small{color:#b9bbc6}
+  .slab.base::before{background:var(--orange-b)}
+  .slab.base.on{background:#1d1e23;box-shadow:0 18px 40px -20px rgba(42,44,51,.7)}
+  .slab .heart{color:#ff7a7a;font-size:18px;animation:beat 1.4s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.25)}30%{transform:scale(1)}45%{transform:scale(1.15)}}
+  .pulse{position:absolute;left:107px;top:70px;bottom:130px;width:2px;z-index:0}
+  .pulse i{position:absolute;left:-4px;width:10px;height:10px;border-radius:50%;background:var(--orange-b);box-shadow:0 0 12px var(--orange-b);animation:travel 3.2s var(--ease) infinite;z-index:2}
+  @keyframes travel{0%{top:0;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:100%;opacity:0}}
+  .detail{border-radius:22px;border:1px solid var(--line);padding:34px;background:#fff;position:relative;overflow:hidden;min-height:100%}
+  .detail::after{content:"";position:absolute;right:-90px;bottom:-90px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,var(--blue-1),transparent 70%)}
+  .d-pane{display:none;position:relative;z-index:1}
+  .d-pane.on{display:block;animation:fadeIn .5s var(--ease)}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .kick{font-size:14px;font-weight:600;color:var(--blue-ink)}
+  .d-pane h4{font-family:var(--serif);font-weight:400;font-size:32px;letter-spacing:-.02em;margin:10px 0 12px;line-height:1.15}
+  .d-pane p{color:var(--ink-2)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+  .chip{background:var(--surface-2);border-radius:999px;padding:6px 12px;font-size:13.5px}
+  .chip b{font-weight:600}
+  .eg{margin-top:18px;border-radius:14px 14px 14px 4px;background:var(--bubble-blue);padding:14px 16px;font-size:14.5px}
+  .eg span{display:block;font-size:13px;font-weight:600;color:var(--blue-ink);margin-bottom:4px}
+
+  /* 02 */
+  .mission{position:relative;border-radius:28px;padding:72px 56px;background:#17181c;color:#fff;overflow:hidden}
+  .mission::before{content:"";position:absolute;inset:0;background:radial-gradient(50% 60% at 85% 10%,rgba(166,167,227,.35),transparent 70%),radial-gradient(40% 60% at 5% 100%,rgba(213,101,15,.28),transparent 70%)}
+  .mission>*{position:relative}
+  .mission .mono{color:#b9bbc6}
+  .stmt{font-family:var(--serif);font-size:clamp(34px,4.8vw,62px);line-height:1.18;letter-spacing:-.025em;margin-top:22px;max-width:980px}
+  .ph{position:relative;cursor:pointer;transition:color .3s;border-bottom:2px solid transparent;padding-bottom:2px}
+  .ph sup{font-family:var(--mono);font-size:12px;margin-left:3px;vertical-align:super;opacity:.8}
+  .ph[data-k="1"]{border-color:#7f93f0}.ph[data-k="2"]{border-color:var(--orange-b)}.ph[data-k="3"]{border-color:#e98a8a}.ph[data-k="4"]{border-color:#8fcf9f}
+  .stmt.dim .ph:not(.hl),.stmt.dim .plain{color:rgba(255,255,255,.3)}
+  .plain{transition:color .3s}
+  .notes{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px}
+  .note{border-radius:16px;padding:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);transition:background .3s, transform .3s var(--ease), border-color .3s;cursor:default}
+  .note .k{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;font-family:var(--mono);font-size:11px;color:#17181c;margin-bottom:12px}
+  .note[data-k="1"] .k{background:#7f93f0}.note[data-k="2"] .k{background:var(--orange-b)}.note[data-k="3"] .k{background:#e98a8a}.note[data-k="4"] .k{background:#8fcf9f}
+  .note b{display:block;font-size:15px;margin-bottom:4px}
+  .note p{font-size:14px;color:#c4c6d0}
+  .note.hl{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.25);transform:translateY(-4px)}
+
+  .levers-head{margin:88px 0 30px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+  .levers-head h3{font-family:var(--serif);font-weight:400;font-size:38px;letter-spacing:-.02em;line-height:1.15}
+  .flowline{display:grid;grid-template-columns:auto 1fr auto 1fr auto;align-items:center;gap:0;margin-bottom:28px;padding:28px;border:1px solid var(--line);border-radius:22px;background:var(--surface)}
+  .fnode{background:#fff;border:1px solid var(--line-2);border-radius:14px;padding:14px 18px;text-align:center;font-weight:600;font-size:15px;white-space:nowrap}
+  .fnode.src{background:var(--btn-dark);color:#fff;border-color:var(--btn-dark);display:flex;align-items:center;gap:10px}
+  .fnode.src .orb{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0%,#bed2ff 40%,#a6a7e3 100%)}
+  .fnode.end{background:linear-gradient(140deg,#fff6ef,var(--peach-2));border-color:#f6e2cc}
+  .fmid{display:flex;flex-direction:column;gap:8px}
+  .fmid .fnode{font-weight:500;font-size:14px;padding:10px 16px}
+  .wire{position:relative;height:2px;margin:0 14px;background:repeating-linear-gradient(90deg,#cfd8f3 0 5px,transparent 5px 10px)}
+  .wire i{position:absolute;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--blue-ink);box-shadow:0 0 10px rgba(59,79,216,.6);animation:run 2.4s linear infinite}
+  .wire i:nth-child(2){animation-delay:-1.2s}
+  @keyframes run{from{left:0}to{left:calc(100% - 10px)}}
+  .levers{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .lever{border:1px solid var(--line);border-radius:18px;padding:24px;background:#fff;transition:transform .3s var(--ease), box-shadow .3s}
+  .lever:hover{transform:translateY(-4px);box-shadow:0 22px 40px -28px rgba(42,44,51,.4)}
+  .lever .n{font-family:var(--serif);font-size:46px;line-height:1;color:var(--blue-2);margin-bottom:18px}
+  .lever h4{font-size:17px;line-height:1.3;margin-bottom:8px}
+  .lever p{font-size:14.5px;color:var(--muted)}
+  .lever .ic{float:right;font-size:22px}
+
+  /* 03 */
+  .win-sum{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .win-sum span{border:1px solid var(--line-2);border-radius:999px;padding:7px 14px;font-size:14px;background:#fff}
+  .win-sum span b{font-family:var(--mono);font-size:11px;color:var(--orange-a);margin-right:6px}
+  .adv{border:1px solid var(--line);border-radius:22px;margin-bottom:16px;background:#fff;position:relative;overflow:hidden}
+  .adv::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--c,var(--blue-2))}
+  .adv-top{display:grid;grid-template-columns:56px 1fr auto;gap:18px;align-items:center;padding:28px 30px 22px}
+  .adv .n{font-family:var(--serif);font-size:40px;line-height:1;color:var(--c)}
+  .adv h3{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.2;letter-spacing:-.015em}
+  .adv-s{display:block;margin-top:4px;color:var(--muted);font-size:14.5px}
+  .proof{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;max-width:360px}
+  .proof span{font-size:12.5px;background:var(--blue-1);color:var(--blue-ink);border-radius:999px;padding:5px 11px;font-weight:500;white-space:nowrap}
+  .adv-body{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+  .adv-body .col{padding:20px 30px 26px}
+  .adv-body .moat{background:var(--surface);border-left:1px solid var(--line)}
+  .lab{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .lab .d{width:7px;height:7px;border-radius:50%}
+  .adv-body p{font-size:14.5px;color:var(--ink-2);line-height:1.6}
+  .close{margin-top:80px;border-radius:28px;padding:56px;background:
+     radial-gradient(50% 70% at 0% 0%, rgba(190,210,255,.6), transparent 70%), radial-gradient(50% 70% at 100% 100%, rgba(249,231,187,.8), transparent 70%), var(--blue-1);text-align:center}
+  .close h2{font-size:clamp(30px,4vw,48px);max-width:820px;margin:14px auto 0}
+  footer{padding:36px 0 48px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--line);margin-top:80px}
+  footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+  /* motion extras */
+  .cover-words{transition:opacity .7s ease, transform .7s var(--ease)} .cover-words.out{opacity:0;transform:translateY(24px)}
+  .spot{position:absolute;inset:0;pointer-events:none;background:radial-gradient(380px circle at var(--mx,70%) var(--my,30%),rgba(255,255,255,.75),transparent 60%);transition:background .1s}
+  .cover .wrap{position:relative}
+  .rings{position:absolute;right:6%;bottom:-120px;width:420px;height:420px;pointer-events:none}
+  .rings i{position:absolute;inset:0;margin:auto;border-radius:50%;border:1px solid rgba(59,79,216,.18);animation:ring 6s ease-out infinite}
+  .rings i:nth-child(2){animation-delay:2s}.rings i:nth-child(3){animation-delay:4s}
+  @keyframes ring{from{transform:scale(.25);opacity:1}to{transform:scale(1);opacity:0}}
+  .chap{opacity:0;transform:translateY(16px);animation:chapIn .8s var(--ease) forwards}
+  .chap:nth-child(1){animation-delay:.35s}.chap:nth-child(2){animation-delay:.5s}.chap:nth-child(3){animation-delay:.65s}
+  @keyframes chapIn{to{opacity:1;transform:none}}
+  .cover h1 .w{display:inline-block;opacity:0;transform:translateY(40%);animation:wIn .9s var(--ease) forwards}
+  @keyframes wIn{to{opacity:1;transform:none}}
+  .big .fw{color:#d4d4d4;transition:color .3s}
+  .big .fw.lit{color:var(--ink)} .big i .fw.lit{color:var(--orange-a)}
+  @media (min-width:961px){
+    .adv{position:sticky;top:calc(84px + var(--i)*22px);box-shadow:0 -18px 40px -30px rgba(42,44,51,.35)}
+  }
+  .adv{transform-origin:top center;transition:box-shadow .3s, transform .4s var(--ease), filter .4s}
+  .adv.past{transform:scale(.97);filter:saturate(.6) brightness(.98)}
+  @media (max-width:960px){
+    .toc{display:none}
+    .q{grid-template-columns:1fr;gap:16px} .q-num{font-size:64px}
+    .analogy,.anat-grid,.levers-head{grid-template-columns:1fr}
+    .notes,.levers{grid-template-columns:1fr 1fr}
+    .chapters{grid-template-columns:1fr}
+    .adv-top{grid-template-columns:44px 1fr;padding:22px 20px 16px} .proof{grid-column:1/-1;justify-content:flex-start;max-width:none} .adv-body{grid-template-columns:1fr} .adv-body .moat{border-left:0;border-top:1px solid var(--line)} .adv-body .col{padding:18px 20px}
+    .flowline{grid-template-columns:1fr;gap:12px;justify-items:center} .wire{width:2px;height:28px;margin:0;background:repeating-linear-gradient(180deg,#cfd8f3 0 5px,transparent 5px 10px)} .wire i{display:none}
+    .mission{padding:48px 24px} .close{padding:40px 22px}
+    .cover-words{display:none}
+  }
+  @media (max-width:560px){ .notes,.levers,.facts{grid-template-columns:1fr} .slab .meta-tag{display:none} section.ch{padding:72px 0} .cover{padding:72px 0 60px} }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} .rv,.chap,.cover h1 .w{opacity:1;transform:none} .big .fw{color:inherit} }
+  @media print{
+    .adv{position:static!important;transform:none!important;filter:none!important} .spot,.rings{display:none} .cover h1 .w,.chap{opacity:1;transform:none} .big .fw{color:inherit}
+    .bar{display:none} .rv{opacity:1;transform:none} *{animation:none!important}
+    section.ch{page-break-before:always;padding:40px 0} .cover{padding:60px 0}
+    .d-pane{display:block!important;margin-bottom:22px} .detail{min-height:0}
+    .adv,.lever,.note,.card{break-inside:avoid}
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a href="#top" class="brand"><svg class="wm" viewBox="0 0 202 32" role="img" aria-label="Sarvam"><path fill="currentColor" d="m56.729 1.024-.112 4.665-.025.835-.412-.723c-1.006-1.784-2.395-3.168-4.132-4.137C50.348.7 48.426.21 46.335.21c-2.636 0-5.055.71-7.184 2.1-2.137 1.4-3.87 3.313-5.155 5.687-1.24 2.37-1.871 5.114-1.871 8.149 0 3.035.59 5.733 1.759 8.107 1.164 2.328 2.798 4.199 4.851 5.558 2.087 1.314 4.486 1.983 7.122 1.983 4.686 0 8.157-1.879 10.327-5.592l.408-.698.025.81.112 4.64h6.74V1.023h-6.74Zm-2.307 21.872c-1.626 1.788-3.763 2.690-6.353 2.690s-4.744-.902-6.410-2.686c-1.643-1.804-2.441-4.053-2.441-6.872s.823-5.138 2.440-6.872c1.663-1.784 3.820-2.690 6.410-2.690 2.591 0 4.728.906 6.354 2.690 1.617 1.738 2.436 4.050 2.436 6.872 0 2.823-.820 5.093-2.436 6.868ZM86.862 1.126l-.61 6.602A10.737 10.737 0 0 0 82.68 7.1c-2.424 0-4.32.903-5.638 2.67-1.305 1.708-1.962 4.174-1.962 7.33v13.848H68V1.035h6.785l.054 5.824.013 1.277.436-1.202c.74-2.02 1.838-3.6 3.28-4.685 1.43-1.119 3.114-1.692 5.01-1.692.624 0 1.256.062 1.875.174.578.104 1.048.237 1.414.395h-.005ZM119.693 1.047 107.956 30.95h-7.512L88.704 1.047h7.952l7.584 22.625.108.324.108-.324 7.766-22.625h7.471ZM143.905 1.020l-.133 4.669-.017.835-.412-.723c-1.010-1.784-2.398-3.168-4.132-4.137C137.510.7 135.590.21 133.499.21c-2.640 0-5.056.71-7.185 2.1-2.136 1.4-3.874 3.313-5.155 5.687-1.243 2.370-1.875 5.114-1.875 8.149 0 3.035.595 5.737 1.759 8.107 1.164 2.328 2.802 4.199 4.856 5.558 2.087 1.314 4.481 1.983 7.121 1.983 4.682 0 8.157-1.879 10.319-5.592l.412-.698.016.810.121 4.640h6.735l.013-29.925h-6.735l.004-.008Zm-2.333 21.872c-1.621 1.788-3.758 2.690-6.352 2.690-2.595 0-4.744-.902-6.411-2.686-1.642-1.804-2.436-4.053-2.436-6.872s.819-5.139 2.436-6.872c1.663-1.784 3.821-2.690 6.411-2.690 2.590 0 4.731.906 6.352 2.690 1.618 1.738 2.437 4.050 2.437 6.872 0 2.823-.819 5.093-2.437 6.868ZM201.773 12.858v18.090h-7.051V14.233c0-5.180-2.025-7.807-6.020-7.807-2.129 0-3.817.752-5.014 2.232-1.143 1.430-1.721 3.488-1.721 6.116V30.950h-6.997V14.176c0-5.143-2.004-7.750-5.958-7.750-2.133 0-3.821.753-5.014 2.233-1.185 1.426-1.779 3.484-1.779 6.116V30.950h-6.997V1.026h6.764l.054 4.382.012.973.424-.873a9.042 9.042 0 0 1 3.609-3.900c1.592-.931 3.455-1.401 5.550-1.401 4.490 0 7.588 1.979 9.213 5.883l.208.495.216-.487c.815-1.820 2.108-3.272 3.850-4.315C186.864.73 188.851.207 191.030.207c3.455 0 6.124 1.098 7.941 3.260 1.858 2.132 2.802 5.296 2.802 9.391ZM29.963 22.035c0 3.575-1.659 6.260-4.930 7.974C21.892 31.655 18.051 32 15.377 32c-5.180 0-9.117-.990-11.699-2.944C1.285 27.244.050 24.616.004 21.250v-.104L0 20.937h7.350l.009.200v.095c.158 3.538 3.076 5.488 8.227 5.488 2.112 0 7.018-.395 7.018-4.058 0-2.956-4.003-3.513-8.635-4.165C7.754 17.627.711 16.638.711 9.508.71 3.468 5.604 0 14.130 0c9.122 0 14.248 3.363 14.834 9.728l.008.113.021.228h-7.363l-.016-.190-.009-.092c-.200-2.179-2.190-4.507-7.184-4.507-4.257 0-6.598 1.339-6.598 3.770 0 2.707 3.870 3.181 8.357 3.734 3.064.374 6.535.803 9.184 2.054 3.093 1.463 4.598 3.820 4.598 7.197Z"/></svg><span class="sep"></span><span class="bt">All things Sarvam</span></a>
+    <nav class="toc" id="toc"><a href="#what">01 What is Sarvam</a><a href="#mission">02 Mission</a><a href="#win">03 Right to win</a></nav>
+  </div>
+  <div class="progress" id="prog"></div>
+</header>
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <div class="spot" id="spot" aria-hidden="true"></div>
+  <div class="rings" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="cover-words" id="coverWord" aria-hidden="true">सर्वम्</div>
+  <div class="wrap">
+    <div class="cover-logo"><svg class="wm" viewBox="0 0 202 32" role="img" aria-label="Sarvam"><path fill="currentColor" d="m56.729 1.024-.112 4.665-.025.835-.412-.723c-1.006-1.784-2.395-3.168-4.132-4.137C50.348.7 48.426.21 46.335.21c-2.636 0-5.055.71-7.184 2.1-2.137 1.4-3.87 3.313-5.155 5.687-1.24 2.37-1.871 5.114-1.871 8.149 0 3.035.59 5.733 1.759 8.107 1.164 2.328 2.798 4.199 4.851 5.558 2.087 1.314 4.486 1.983 7.122 1.983 4.686 0 8.157-1.879 10.327-5.592l.408-.698.025.81.112 4.64h6.74V1.023h-6.74Zm-2.307 21.872c-1.626 1.788-3.763 2.690-6.353 2.690s-4.744-.902-6.410-2.686c-1.643-1.804-2.441-4.053-2.441-6.872s.823-5.138 2.440-6.872c1.663-1.784 3.820-2.690 6.410-2.690 2.591 0 4.728.906 6.354 2.690 1.617 1.738 2.436 4.050 2.436 6.872 0 2.823-.820 5.093-2.436 6.868ZM86.862 1.126l-.61 6.602A10.737 10.737 0 0 0 82.68 7.1c-2.424 0-4.32.903-5.638 2.67-1.305 1.708-1.962 4.174-1.962 7.33v13.848H68V1.035h6.785l.054 5.824.013 1.277.436-1.202c.74-2.02 1.838-3.6 3.28-4.685 1.43-1.119 3.114-1.692 5.01-1.692.624 0 1.256.062 1.875.174.578.104 1.048.237 1.414.395h-.005ZM119.693 1.047 107.956 30.95h-7.512L88.704 1.047h7.952l7.584 22.625.108.324.108-.324 7.766-22.625h7.471ZM143.905 1.020l-.133 4.669-.017.835-.412-.723c-1.010-1.784-2.398-3.168-4.132-4.137C137.510.7 135.590.21 133.499.21c-2.640 0-5.056.71-7.185 2.1-2.136 1.4-3.874 3.313-5.155 5.687-1.243 2.370-1.875 5.114-1.875 8.149 0 3.035.595 5.737 1.759 8.107 1.164 2.328 2.802 4.199 4.856 5.558 2.087 1.314 4.481 1.983 7.121 1.983 4.682 0 8.157-1.879 10.319-5.592l.412-.698.016.810.121 4.640h6.735l.013-29.925h-6.735l.004-.008Zm-2.333 21.872c-1.621 1.788-3.758 2.690-6.352 2.690-2.595 0-4.744-.902-6.411-2.686-1.642-1.804-2.436-4.053-2.436-6.872s.819-5.139 2.436-6.872c1.663-1.784 3.821-2.690 6.411-2.690 2.590 0 4.731.906 6.352 2.690 1.618 1.738 2.437 4.050 2.437 6.872 0 2.823-.819 5.093-2.437 6.868ZM201.773 12.858v18.090h-7.051V14.233c0-5.180-2.025-7.807-6.020-7.807-2.129 0-3.817.752-5.014 2.232-1.143 1.430-1.721 3.488-1.721 6.116V30.950h-6.997V14.176c0-5.143-2.004-7.750-5.958-7.750-2.133 0-3.821.753-5.014 2.233-1.185 1.426-1.779 3.484-1.779 6.116V30.950h-6.997V1.026h6.764l.054 4.382.012.973.424-.873a9.042 9.042 0 0 1 3.609-3.900c1.592-.931 3.455-1.401 5.550-1.401 4.490 0 7.588 1.979 9.213 5.883l.208.495.216-.487c.815-1.820 2.108-3.272 3.850-4.315C186.864.73 188.851.207 191.030.207c3.455 0 6.124 1.098 7.941 3.260 1.858 2.132 2.802 5.296 2.802 9.391ZM29.963 22.035c0 3.575-1.659 6.260-4.930 7.974C21.892 31.655 18.051 32 15.377 32c-5.180 0-9.117-.990-11.699-2.944C1.285 27.244.050 24.616.004 21.250v-.104L0 20.937h7.350l.009.200v.095c.158 3.538 3.076 5.488 8.227 5.488 2.112 0 7.018-.395 7.018-4.058 0-2.956-4.003-3.513-8.635-4.165C7.754 17.627.711 16.638.711 9.508.71 3.468 5.604 0 14.130 0c9.122 0 14.248 3.363 14.834 9.728l.008.113.021.228h-7.363l-.016-.190-.009-.092c-.200-2.179-2.190-4.507-7.184-4.507-4.257 0-6.598 1.339-6.598 3.770 0 2.707 3.870 3.181 8.357 3.734 3.064.374 6.535.803 9.184 2.054 3.093 1.463 4.598 3.820 4.598 7.197Z"/></svg></div>
+    <span class="tag mono"><b>Part 1</b>PMM assignment</span>
+    <h1><span class="w" style="animation-delay:.05s">All</span> <span class="w" style="animation-delay:.15s">things</span> <span class="w" style="animation-delay:.25s"><em class="grad">Sarvam.</em></span></h1>
+    <p class="sub">What Sarvam is, what it's really trying to do, and why it has the right to win.</p>
+    <div class="meta">
+      <div><span class="mono">Prepared by</span><b>Akanksha Bawa</b></div>
+      <div><span class="mono">For</span><b>Sarvam AI</b></div>
+      <div><span class="mono">Covers</span><b>Positioning · Mission · Differentiators</b></div>
+    </div>
+    <div class="chapters">
+      <a class="chap" href="#what"><span class="mono">01</span><h3>What is Sarvam?</h3><p>Explained the way you'd say it out loud.</p></a>
+      <a class="chap" href="#mission"><span class="mono">02</span><h3>The mission</h3><p>The ambition, and the levers to get there.</p></a>
+      <a class="chap" href="#win"><span class="mono">03</span><h3>Right to win</h3><p>What belongs only to Sarvam.</p></a>
+    </div>
+  </div>
+</div>
+
+<!-- 01 -->
+<section class="ch" id="what">
+  <div class="wrap">
+    <div class="q rv">
+      <div><div class="q-num">01</div><div class="q-label mono">What is Sarvam?</div></div>
+      <div>
+        <p class="q-ask">If you were explaining Sarvam to someone conversationally, what would you say?</p>
+        <p class="big">Sarvam is India's sovereign AI platform, built to understand how <i>India speaks, writes, thinks and reasons.</i></p>
+      </div>
+    </div>
+
+    <div class="analogy rv">
+      <div class="card peach">
+        <span class="mono">Think of it this way</span>
+        <p>The Indian Constitution was written by Indians, for the people of India. Sarvam is essentially that, but for AI.</p>
+        <p style="font-family:var(--sans);font-size:15px;color:#6b4a33;margin-top:16px;line-height:1.6">It runs on compute hosted in India, is powered by frontier-class models of up to 105 billion parameters trained from scratch, and is built by people who understand India's pulse: our languages, the way we mix Hindi and English, and the real problems our banks, insurers and governments are solving. The only difference? Anyone in the world can use it, because Sarvam has open-sourced its flagship models.</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><b><span class="count" data-to="105">0</span>B</b><span>parameters in its largest model, trained from scratch</span></div>
+        <div class="fact"><b>🇮🇳</b><span>India-hosted compute. Data never leaves the country</span></div>
+        <div class="fact"><b>Open</b><span>flagship models open-sourced for the world</span></div>
+        <div class="fact"><b><span class="count" data-to="100">0</span>s</b><span>of Indian and global enterprises and governments</span></div>
+      </div>
+    </div>
+
+    <div class="anat rv">
+      <div class="anat-head">
+        <h3>How Sarvam's offering works</h3>
+        <span class="muted" style="font-size:14px">Read top to bottom · tap a layer to explore it</span>
+      </div>
+      <div class="anat-grid">
+        <div class="stack" id="stack">
+          <div class="pulse" aria-hidden="true"><i></i></div>
+          <button class="slab on" data-p="0"><span class="num">01</span><span class="ico" style="--bg:#efeafd;--fg:#5b4bc4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3v.2A3 3 0 0 0 4 10a3 3 0 0 0 1 2.2A3 3 0 0 0 6 17a3 3 0 0 0 3 3V4Z"/><path d="M15 4a3 3 0 0 1 3 3v.2A3 3 0 0 1 20 10a3 3 0 0 1-1 2.2A3 3 0 0 1 18 17a3 3 0 0 1-3 3V4Z"/><path d="M9 12h6"/></svg></span><span class="tx"><b>AI models</b><small>The brain</small></span></button>
+          <div class="link"><span>powers</span></div>
+          <button class="slab" data-p="1"><span class="num">02</span><span class="ico" style="--bg:var(--bubble-blue);--fg:var(--blue-ink)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><path d="M17.5 14v7M14 17.5h7"/></svg></span><span class="tx"><b>APIs</b><small>The individual skills</small></span></button>
+          <div class="link"><span>come together as</span></div>
+          <button class="slab" data-p="2"><span class="num">03</span><span class="ico" style="--bg:var(--bubble-peach);--fg:var(--orange-a)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg></span><span class="tx"><b>Ready-to-use products</b><small>The trained professional</small></span></button>
+          <button class="slab base" data-p="3"><span class="ico" style="--bg:rgba(255,255,255,.1);--fg:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/></svg></span><span class="tx"><b>India-hosted infrastructure</b><small>The heart that runs all three</small></span><span class="heart">♥</span></button>
+        </div>
+        <div class="detail" id="detail">
+          <div class="d-pane on">
+            <span class="kick">01 · The brain</span>
+            <h4>AI models built from scratch to understand India</h4>
+            <p>Frontier-class models trained on India-specific data, open-sourced for anyone to build on.</p>
+            <div class="chips"><span class="chip"><b>Sarvam 30B</b></span><span class="chip"><b>Sarvam 105B</b></span><span class="chip">Powers <b>Indus</b>, Sarvam's chat app</span></div>
+            <div class="eg"><span>Why it matters</span>Most models were built for English first. These were built for how India mixes languages and reasons.</div>
+          </div>
+          <div class="d-pane">
+            <span class="kick">02 · The individual skills</span>
+            <h4>APIs developers plug into their own apps</h4>
+            <p>Each skill does one thing really well, so developers can mix and match.</p>
+            <div class="chips"><span class="chip"><b>Saaras</b> · listens</span><span class="chip"><b>Bulbul</b> · speaks</span><span class="chip"><b>Mayura</b> · translates</span><span class="chip"><b>Sarvam Vision</b> · reads documents</span></div>
+            <div class="eg"><span>For instance</span>A tutoring app can use them to understand a child's question in Hindi and answer back in a natural voice.</div>
+          </div>
+          <div class="d-pane">
+            <span class="kick">03 · The trained professional</span>
+            <h4>Ready-to-use products</h4>
+            <p>Products that companies and governments can use to solve real-life problems, straight out of the box.</p>
+            <div class="chips"><span class="chip"><b>Voice Agents</b> · flagship</span><span class="chip"><b>Doc Agents</b></span><span class="chip"><b>Content Studio</b></span></div>
+            <div class="eg"><span>For instance</span>Voice Agents help a bank call lakhs of customers about EMI reminders in Tamil or Marathi. Doc Agents digitise handwritten records across 22 Indian languages. Content Studio dubs Mann Ki Baat into multiple languages.</div>
+          </div>
+          <div class="d-pane">
+            <span class="kick">The heart · Runs all three</span>
+            <h4>Sarvam's own India-hosted infrastructure</h4>
+            <p>The compute layer that runs Sarvam's models, or other leading open models.</p>
+            <div class="chips"><span class="chip">Sarvam or open models</span><span class="chip">Hosted in India</span><span class="chip">Data stays in India</span></div>
+            <div class="eg"><span>What customers get</span>The freedom to choose the right model for the job, and the guarantee that their data never leaves India.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="ch" id="mission">
+  <div class="wrap">
+    <div class="q rv">
+      <div><div class="q-num">02</div><div class="q-label mono">The mission</div></div>
+      <div>
+        <p class="q-ask">Write a clear mission statement that captures not just the ambition of the company but the levers to get there.</p>
+      </div>
+    </div>
+
+    <div class="mission rv">
+      <span class="mono">Mission statement</span>
+      <p class="stmt" id="stmt"><span class="plain">Sarvam's mission is to </span><span class="ph" data-k="1">make AI work<sup>1</sup></span><span class="plain"> </span><span class="ph" data-k="2">for every Indian<sup>2</sup></span><span class="plain">, </span><span class="ph" data-k="3">in their own language<sup>3</sup></span><span class="plain">, </span><span class="ph" data-k="4">on India's own terms.<sup>4</sup></span></p>
+      <div class="notes" id="notes">
+        <div class="note" data-k="1"><span class="k">1</span><b>Make AI work</b><p>Not just build AI for research, but use it to solve real problems.</p></div>
+        <div class="note" data-k="2"><span class="k">2</span><b>For every Indian</b><p>The people who ultimately benefit.</p></div>
+        <div class="note" data-k="3"><span class="k">3</span><b>In their own language</b><p>Most AI platforms weren't built for how India speaks, or even thinks.</p></div>
+        <div class="note" data-k="4"><span class="k">4</span><b>On India's own terms</b><p>The outcome: India controlling its AI, its data and its future.</p></div>
+      </div>
+    </div>
+
+    <div class="levers-head rv">
+      <h3>The levers to get there</h3>
+      <p class="muted">Sarvam will reach every Indian through the enterprises, governments and developers who serve them.</p>
+    </div>
+
+    <div class="flowline rv" aria-label="Sarvam reaches every Indian through enterprises, governments and developers">
+      <div class="fnode src"><span class="orb"></span>Sarvam</div>
+      <div class="wire"><i></i><i></i></div>
+      <div class="fmid"><div class="fnode">🏦 Enterprises</div><div class="fnode">🏛️ Governments</div><div class="fnode">💻 Developers</div></div>
+      <div class="wire"><i></i><i></i></div>
+      <div class="fnode end">Every Indian</div>
+    </div>
+
+    <div class="levers">
+      <div class="lever rv"><span class="ic">🏗️</span><div class="n">1</div><h4>Build the full stack in India</h4><p>From compute to models to products, so the country has full control over its data.</p></div>
+      <div class="lever rv" style="transition-delay:.08s"><span class="ic">₹</span><div class="n">2</div><h4>Make AI affordable at population scale</h4><p>So it can reach a billion people in real time.</p></div>
+      <div class="lever rv" style="transition-delay:.16s"><span class="ic">🛡️</span><div class="n">3</div><h4>Prove it where the stakes are highest</h4><p>With enterprises and governments in banking, insurance, public services and defence, where AI touches crores of lives.</p></div>
+      <div class="lever rv" style="transition-delay:.24s"><span class="ic">🧩</span><div class="n">4</div><h4>Put it in the hands of India's developers</h4><p>With open models and APIs, so the whole ecosystem can build on top of it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="ch" id="win">
+  <div class="wrap">
+    <div class="q rv">
+      <div><div class="q-num">03</div><div class="q-label mono">Right to win</div></div>
+      <div>
+        <p class="q-ask">What are the differentiators that belong solely to Sarvam and make up the company's right to win?</p>
+        <h2>Five advantages no one else has together.</h2>
+        <div class="win-sum"><span><b>01</b>Full stack</span><span><b>02</b>Sovereign trust</span><span><b>03</b>Distribution</span><span><b>04</b>Proven at scale</span><span><b>05</b>Founders</span></div>
+      </div>
+    </div>
+
+    <div class="adv rv" style="--i:0;--c:#7f93f0">
+      <div class="adv-top"><span class="n">01</span><div class="adv-t"><h3>The only full-stack sovereign AI company running at scale</h3><span class="adv-s">Owns every layer</span></div><div class="proof"><span>Compute</span><span>Models</span><span>Products</span></div></div>
+      <div class="adv-body">
+        <div class="col"><span class="lab"><i class="d" style="background:var(--blue-ink)"></i>The proof</span><p>Owns every layer: India-hosted compute (token factory), models trained on India-specific data from scratch, and products handling billions of interactions.</p></div>
+        <div class="col moat"><span class="lab"><i class="d" style="background:var(--green)"></i>Why it's hard to copy</span><p>Most Indian AI players focus on one piece. BharatGen and Soket are building models; Gnani is focused on voice AI. To catch up, they'd need India-hosted infrastructure and enterprise-ready products too, all working together in production.</p></div>
+      </div>
+    </div>
+
+    <div class="adv rv" style="--i:1;--c:var(--orange-b)">
+      <div class="adv-top"><span class="n">02</span><div class="adv-t"><h3>India's trusted partner for its most sensitive AI</h3><span class="adv-s">Chosen by government and defence</span></div><div class="proof"><span>IndiaAI Mission</span><span>Defence · Chanakya</span><span>TN &amp; Odisha MoUs</span></div></div>
+      <div class="adv-body">
+        <div class="col"><span class="lab"><i class="d" style="background:var(--blue-ink)"></i>The proof</span><p>Selected under the IndiaAI Mission, a five-year defence agreement via its Chanakya division, and MoUs with Tamil Nadu and Odisha.</p></div>
+        <div class="col moat"><span class="lab"><i class="d" style="background:var(--green)"></i>Why it's hard to copy</span><p>Everything is built, hosted and governed in India, which is non-negotiable for defence and government work. Deep integrations with these customers mean very low churn risk.</p></div>
+      </div>
+    </div>
+
+    <div class="adv rv" style="--i:2;--c:#e98a8a">
+      <div class="adv-top"><span class="n">03</span><div class="adv-t"><h3>A distribution engine no other Indian AI company has</h3><span class="adv-s">A global sales arm, plus devices</span></div><div class="proof"><span>HCLTech · $150M</span><span>Qualcomm</span><span>Bosch</span><span>Nokia</span></div></div>
+      <div class="adv-body">
+        <div class="col"><span class="lab"><i class="d" style="background:var(--blue-ink)"></i>The proof</span><p>HCLTech's $150M stake to build and sell solutions on Sarvam globally, plus device partnerships with Qualcomm, Bosch and Nokia.</p></div>
+        <div class="col moat"><span class="lab"><i class="d" style="background:var(--green)"></i>Why it's hard to copy</span><p>HCLTech sells to large enterprises worldwide. No other Indian AI company has a partner like that taking its models to market.</p></div>
+      </div>
+    </div>
+
+    <div class="adv rv" style="--i:3;--c:#8fcf9f">
+      <div class="adv-top"><span class="n">04</span><div class="adv-t"><h3>Proven in one of the world's hardest markets</h3><span class="adv-s">Live with India's largest distribution businesses</span></div><div class="proof"><span>8 cr+ policyholders</span><span>3.5 L+ distributors</span><span>325M+ minutes</span></div></div>
+      <div class="adv-body">
+        <div class="col"><span class="lab"><i class="d" style="background:var(--blue-ink)"></i>The proof</span><p>Deep integrations with some of India's largest distribution businesses. SBI Life's rollout alone reaches 8 crore+ policyholders and 3.5 lakh+ distributors, and voice calls total 325M+ minutes.</p></div>
+        <div class="col moat"><span class="lab"><i class="d" style="background:var(--green)"></i>Why it's hard to copy</span><p>First-mover advantage. Every real call teaches Sarvam how India actually talks, across a stack it fully owns, which new players will take years to build. That know-how carries over to other multilingual, emerging markets.</p></div>
+      </div>
+    </div>
+
+    <div class="adv rv" style="--i:4;--c:var(--lavender)">
+      <div class="adv-top"><span class="n">05</span><div class="adv-t"><h3>A founder brand governments already trust</h3><span class="adv-s">Built Aadhaar and AI4Bharat</span></div><div class="proof"><span>Aadhaar</span><span>AI4Bharat</span></div></div>
+      <div class="adv-body">
+        <div class="col"><span class="lab"><i class="d" style="background:var(--blue-ink)"></i>The proof</span><p>Founders who built the very backbone of India's digital infrastructure: Aadhaar, and AI4Bharat, India's open-source Indian-language AI.</p></div>
+        <div class="col moat"><span class="lab"><i class="d" style="background:var(--green)"></i>Why it's hard to copy</span><p>Governments already know and trust these founders from building Aadhaar, a system used by over a billion Indians.</p></div>
+      </div>
+    </div>
+
+    <div class="close rv">
+      <span class="mono muted">In one line</span>
+      <h2>The only Indian AI company that <em class="grad">owns the full stack</em>, has the government's trust, and is already proven at population scale.</h2>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><span>All things Sarvam · Part 1 · Prepared by Akanksha Bawa</span><span>Prepared for Sarvam AI as part of a PMM assignment</span></div>
+</footer>
+
+<script>
+(function(){
+  var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // cover: script cycle + spotlight
+  var cw=document.getElementById("coverWord"), words=["सर्वम्","சர்வம்","সর্বম্","సర్వం","ಸರ್ವಂ","സർവം","સર્વમ્","ਸਰਵਮ","Sarvam"], wi=0;
+  if(!reduce) setInterval(function(){ cw.classList.add("out"); setTimeout(function(){ wi=(wi+1)%words.length; cw.textContent=words[wi]; cw.classList.remove("out"); },700); },2600);
+  var cov=document.querySelector(".cover"), spot=document.getElementById("spot");
+  cov.addEventListener("mousemove",function(e){ var r=cov.getBoundingClientRect(); spot.style.setProperty("--mx",(e.clientX-r.left)+"px"); spot.style.setProperty("--my",(e.clientY-r.top)+"px"); });
+  // lede word fill on scroll
+  var big=document.querySelector(".big");
+  (function split(node){ [].slice.call(node.childNodes).forEach(function(c){ if(c.nodeType===3){ var frag=document.createDocumentFragment(); c.textContent.split(/(\s+)/).forEach(function(t){ if(!t) return; if(/^\s+$/.test(t)) frag.appendChild(document.createTextNode(t)); else { var sp=document.createElement("span"); sp.className="fw"; sp.textContent=t; frag.appendChild(sp);} }); node.replaceChild(frag,c);} else split(c); }); })(big);
+  var fws=[].slice.call(big.querySelectorAll(".fw"));
+  function fill(){ var r=big.getBoundingClientRect(), vh=innerHeight, p=(vh*.85-r.top)/(vh*.5); p=Math.max(0,Math.min(1,p)); var n=Math.round(p*fws.length); fws.forEach(function(w,i){ w.classList.toggle("lit",i<n); }); }
+  if(reduce) fws.forEach(function(w){w.classList.add("lit");}); else { addEventListener("scroll",fill,{passive:true}); fill(); }
+  // counters
+  var cio=new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) return; var el=e.target, to=+el.dataset.to, t0=null; cio.unobserve(el);
+    requestAnimationFrame(function st(now){ if(!t0) t0=now; var p=Math.min(1,(now-t0)/1400); el.textContent=Math.round(to*(1-Math.pow(1-p,3))); if(p<1) requestAnimationFrame(st); }); }); },{threshold:.6});
+  document.querySelectorAll(".count").forEach(function(el){ if(reduce) el.textContent=el.dataset.to; else cio.observe(el); });
+  // stacking cards: dim the ones underneath
+  var advs=[].slice.call(document.querySelectorAll(".adv"));
+  function stackFx(){ advs.forEach(function(a,i){ var nx=advs[i+1]; a.classList.toggle("past", !!nx && nx.getBoundingClientRect().top - a.getBoundingClientRect().top < 60); }); }
+  addEventListener("scroll",stackFx,{passive:true});
+  // reveal
+  var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("on"); io.unobserve(e.target);} }); },{threshold:.12});
+  document.querySelectorAll(".rv").forEach(function(el){ io.observe(el); });
+  // progress + toc
+  var prog=document.getElementById("prog"), links=[].slice.call(document.querySelectorAll("#toc a")), secs=links.map(function(a){ return document.querySelector(a.getAttribute("href")); });
+  function onScroll(){ var h=document.documentElement; prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%";
+    var cur=-1; secs.forEach(function(s,i){ if(s.getBoundingClientRect().top<160) cur=i; }); links.forEach(function(a,i){ a.classList.toggle("on",i===cur); }); }
+  addEventListener("scroll",onScroll,{passive:true}); onScroll();
+  // anatomy stack
+  var slabs=[].slice.call(document.querySelectorAll(".slab")), panes=[].slice.call(document.querySelectorAll(".d-pane")), cur=0, auto;
+  function show(i){ cur=i; slabs.forEach(function(s,k){ s.classList.toggle("on",k===i); }); panes.forEach(function(p,k){ p.classList.toggle("on",k===i); }); }
+  slabs.forEach(function(s,i){ s.addEventListener("click",function(){ show(i); clearInterval(auto); }); });
+  if(!reduce){ var started=false; new IntersectionObserver(function(es,o){ if(es[0].isIntersecting&&!started){ started=true; auto=setInterval(function(){ show((cur+1)%slabs.length); },4200); o.disconnect(); } },{threshold:.4}).observe(document.getElementById("stack")); }
+  // mission phrase <-> note highlighting
+  var stmt=document.getElementById("stmt"), phs=[].slice.call(stmt.querySelectorAll(".ph")), notes=[].slice.call(document.querySelectorAll(".note")), mAuto, mi=-1, hovering=false;
+  function hl(k){ stmt.classList.toggle("dim",!!k); phs.forEach(function(p){ p.classList.toggle("hl",p.dataset.k===k); }); notes.forEach(function(n){ n.classList.toggle("hl",n.dataset.k===k); }); }
+  phs.concat(notes).forEach(function(el){ el.addEventListener("mouseenter",function(){ hovering=true; hl(el.dataset.k); }); el.addEventListener("mouseleave",function(){ hovering=false; hl(null); }); });
+  if(!reduce){ var mStarted=false; new IntersectionObserver(function(es,o){ if(es[0].isIntersecting&&!mStarted){ mStarted=true; mAuto=setInterval(function(){ if(hovering) return; mi=(mi+1)%5; hl(mi<4?String(mi+1):null); },1800); o.disconnect(); } },{threshold:.5}).observe(stmt); }
+})();
+</script>
+</body>
+</html>
